@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 //import { threadId } from 'node:worker_threads';
 import { Product } from 'src/app/models/product';
+import { CartService } from 'src/app/services/cart.service';
 //import { ProductResponseModel } from 'src/app/models/productResponseModel';
 import { ProductService } from 'src/app/services/product.service';
 
@@ -15,8 +17,8 @@ export class ProductComponent implements OnInit {
   
   products:Product[] = [];
   dataLoaded=false;
-  
-  constructor(private productService:ProductService,private activatedRoute:ActivatedRoute) { 
+  filterText="";
+  constructor(private productService:ProductService,private activatedRoute:ActivatedRoute,private toastrService:ToastrService,private cartService:CartService) { 
 
   }
 
@@ -45,6 +47,13 @@ getProductsByCategory(categoryID:number){
       this.products=response.data;
       this.dataLoaded=true;
     })
+  }
+  addToCart(product:Product){
+    
+      this.toastrService.success("Added to cart",product.productName);
+      this.cartService.addToCart(product);
+    
+    
   }
 
 }
